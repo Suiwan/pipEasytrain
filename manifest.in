@@ -1,0 +1,3 @@
+graft EasyTrain/static
+graft EasyTrain/templates
+global-exclude *.pyc

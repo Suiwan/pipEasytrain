@@ -1,0 +1,396 @@
+#myCarousel {
+    height: 100vh;
+    /* 设置轮播容器的高度为视口高度 */
+}
+
+.carousel-item {
+    height: 100vh;
+    /* 设置每个轮播项目的高度为视口高度 */
+}
+
+.title {
+    color: white;
+    /* 设置标题文本颜色为白色 */
+    text-align: center;
+    /* 设置文本居中 */
+    position: relative;
+    /* 设置相对定位，以便稍微往上 */
+    top: 15%;
+    /* 设置相对定位的top值为20% */
+}
+
+.subtitle {
+    color: white;
+    /* 设置标题文本颜色为白色 */
+    text-align: center;
+    /* 设置文本居中 */
+    position: relative;
+    /* 设置相对定位，以便稍微往上 */
+    top: 20%;
+    /* 设置相对定位的top值为20% */
+}
+
+
+.subtitle-task,
+.subtitle-dataset,
+.subtitle-model {
+    color: white;
+    /* 设置标题文本颜色为白色 */
+    text-align: center;
+    /* 设置文本居中 */
+    position: relative;
+    /* 设置相对定位，以便稍微往上 */
+    /* top: 20%; */
+    /* 设置相对定位的top值为20% */
+}
+
+
+.spantitle {
+    color: white;
+    /* 设置标题文本颜色为白色 */
+    position: absolute;
+    top: 86.7%;
+    /* 设置相对定位的top值为20% */
+    left: 13.5%;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+.label-select {
+    color: white;
+    /* 设置标题文本颜色为白色 */
+    font-size: 26px;
+    font-weight: bold;
+}
+
+/* 下拉选择框样式 */
+.form-select {
+    background-color: #f0f0f0;
+    /* 设置背景颜色 */
+    color: #333;
+    /* 设置字体颜色 */
+    border: 2px solid #ccc;
+    /* 设置边框样式 */
+    border-radius: 5px;
+    /* 设置边框圆角 */
+    padding: 8px;
+    /* 设置内边距 */
+}
+
+.container {
+    text-align: center;
+    /* 文本水平居中 */
+    padding-top: 50px;
+    /* 向下偏移 */
+    height: 100vh;
+    /* 设置容器的高度为视口高度 */
+}
+
+#task-select-form {
+    position: absolute;
+    top: 40%;
+    /* 相对于父容器的垂直居中 */
+    left: 50%;
+    /* 相对于父容器的水平居中 */
+    transform: translate(-50%, -50%);
+    /* 通过平移来实现居中 */
+    /* 更大一点 */
+    width: 500px;
+    height: 300px;
+    padding: 20px;
+}
+
+#model-select-form {
+    position: absolute;
+    top: 40%;
+    /* 相对于父容器的垂直居中 */
+    left: 50%;
+    /* 相对于父容器的水平居中 */
+    transform: translate(-50%, -50%);
+    /* 通过平移来实现居中 */
+    /* 更大一点 */
+    width: 500px;
+    height: 300px;
+    padding: 20px;
+}
+
+#dataset-select-form {
+    position: absolute;
+    top: 40%;
+    /* 相对于父容器的垂直居中 */
+    left: 50%;
+    /* 相对于父容器的水平居中 */
+    transform: translate(-50%, -50%);
+    /* 通过平移来实现居中 */
+    /* 更大一点 */
+    width: 500px;
+    height: 300px;
+    padding: 20px;
+}
+
+#task-submit-btn,
+#model-submit-btn,
+#dataset-submit-btn {
+    width: 200px;
+    /* 根据需要设置按钮宽度 */
+}
+
+#code-generate-btn {
+    width: 150px;
+    position: absolute;
+    left: 55%;
+    top: 77%;
+}
+
+#goto-train-btn {
+    width: 150px;
+    position: absolute;
+    left: 70%;
+    top: 77%;
+}
+
+#cfg-submit-btn {
+    width: 200px;
+    margin-left: 40px;
+}
+
+
+.vertical-divider {
+    width: 2px;
+    /* 分割线的宽度 */
+    top: 20%;
+    height: 60%;
+    /* 分割线的高度，确保它垂直铺满容器 */
+    background-color: white;
+    /* 分割线的颜色 */
+    position: absolute;
+    float: left;
+    left: 40%;
+    border-left: 1px solid #fff;
+    border-radius: 50%;
+
+}
+
+
+.vertical-divider-train {
+    width: 2px;
+    /* 分割线的宽度 */
+    top: 16%;
+    height: 60%;
+    /* 分割线的高度，确保它垂直铺满容器 */
+    background-color: white;
+    /* 分割线的颜色 */
+    position: absolute;
+    float: left;
+    left: 50%;
+    border-left: 1px solid #fff;
+    border-radius: 50%;
+
+}
+
+.basenn-code-field {
+    width: 43%;
+    height: 52%;
+    /* white-space: pre; */
+    top: 20%;
+    position: absolute;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    /* font-size: 16px; */
+    /* font-family: "Courier New", Courier, monospace; */
+    float: left;
+    left: 45%;
+}
+
+.code-field {
+    width: 43%;
+    height: 52%;
+    /* white-space: pre; */
+    top: 22%;
+    position: absolute;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    /* font-size: 16px; */
+    /* font-family: "Courier New", Courier, monospace; */
+    float: left;
+    left: 45%;
+}
+
+.train_cfg_field {
+    position: absolute;
+    float: left;
+    left: 10%;
+    top: 16%;
+}
+
+#stop-train-btn {
+    width: 150px;
+    position: absolute;
+    left: 65%;
+    top: 77%;
+}
+
+#start-train-btn {
+    width: 150px;
+    position: absolute;
+    left: 20%;
+    top: 77%;
+}
+
+#loss-chart {
+    width: 490px; 
+    /* 以rem为单位 */
+    /* width: 32rem;
+    height: 20rem; */
+    height: 400px;
+    position: absolute;
+    left: 10%;
+    top: 16%;
+    background-color: aliceblue;
+}
+
+#acc-chart {
+    width: 490px;
+    height: 400px;
+    position: absolute;
+    left: 53%;
+    top: 16%;
+    background-color: aliceblue;
+}
+
+#train-progress {
+    width: 70%;
+    position: absolute;
+    left: 20%;
+    top: 88%;
+}
+
+#code-copy-btn {
+    position: absolute;
+    left: 84%;
+    top: 25%;
+    cursor: pointer;
+    background-color: #eee;
+    background-image: linear-gradient(#fcfcfc, #eee);
+    border: 1px solid #d5d5d5;
+    border-radius: 3px;
+}
+
+
+/* 使用弹性居中布局让所有分部居中水平排列 */
+
+.steps-basenn {
+    padding: 5px;
+    /* margin-top: 30px; */
+    display: flex;
+    justify-content: center;
+    margin-left: -200px;
+    margin-right: 50px;
+    /* 页面最上层 */
+    z-index: 999;
+}
+
+/* 进度线宽，5份，20% */
+.step-basenn {
+    width: 20%;
+    height: 20px;
+}
+
+
+.steps {
+    padding: 5px;
+    /* margin-top: 30px; */
+    display: flex;
+    justify-content: center;
+    margin-left: -200px;
+    margin-right: 50px;
+    /* 页面最上层 */
+    z-index: 999;
+}
+
+/* 进度线宽，5份，20% */
+.step {
+    width: 16%;
+    height: 20px;
+}
+
+/* 进度线和序号，使用弹性居中布局让序号和进度线居中 */
+.step-progress {
+    display: flex;
+    justify-content: right;
+}
+
+/* 文本居中 */
+.step-text {
+    width: 100%;
+    margin-top: 10px;
+    margin-left: 20px;
+    text-align: right;
+    /* 设置文字颜色为白色 */
+    color: #ffffff;
+    font-size: large;
+}
+
+/* 进度线 */
+.step-line {
+    width: 100%;
+    height: 12px;
+    margin-top: 10px;
+    background-color: #cccccc;
+}
+
+/* 数字序号 */
+.step-num {
+    width: 30px;
+    height: 30px;
+    line-height: 25px;
+    /* 圆角背景 */
+    border-radius: 50%;
+    color: #ffffff;
+    font-size: 18px;
+    /* 序号居中显示 */
+    text-align: center;
+    background-color: #cccccc;
+    border: 2px solid #cccccc;
+    /* 使用相对于父元素定位，强行回到原来的位置 */
+    position: absolute;
+}
+
+/* 使用渐变背景处理两边 */
+.step-progress.right div {
+    background: linear-gradient(to right, #cccccc 100%, #cccccc 100%, transparent 51%, transparent 100%);
+}
+
+.step-progress.left div {
+    background: linear-gradient(to left, #cccccc 0%, #cccccc 50%, transparent 51%, transparent 100%);
+}
+
+/* 完成效果 */
+.step-progress.done div {
+    background: #3778ce;
+}
+
+.step-progress.done span {
+    background-color: #3778ce;
+    border: 2px solid #3778ce;
+}
+
+/* 完成效果左右两边特制 */
+/* .step-progress.right.done div{
+            background: linear-gradient(to right, #3778ce 0%, #3778ce 50%, transparent 51%, transparent 100%);
+        }
+
+        .step-progress.left.done div{
+            background: linear-gradient(to left, #3778ce 0%, #3778ce 50%, transparent 51%, transparent 100%);
+        } */
+
+.step-progress.right.done div {
+    background: linear-gradient(to right, #3778ce 100%, #3778ce 50%, transparent 51%, transparent 100%);
+}
+
+.step-progress.left.done div {
+    background: linear-gradient(to left, #3778ce 0%, #3778ce 0%, transparent 0%, transparent 0%);
+}
