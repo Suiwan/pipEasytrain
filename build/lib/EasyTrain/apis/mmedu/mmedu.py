@@ -53,11 +53,13 @@ def select_dataset():
         task = global_varibles['task']
         if task=="classification":
             # 检查在checkpoints/mmcls_model/下是否存在该dataset同名文件夹,如果不存在，则创建该文件夹
-            path = pip_settings['workfolder'] + "\\checkpoints\\mmedu_cls_model\\"
+            # path = pip_settings['workfolder'] + "/checkpoints/mmedu_cls_model/"
+            path = os.path.join(pip_settings['workfolder'],"checkpoints","mmedu_cls_model")
             if not os.path.exists(path+dataset):
                 os.makedirs(path+dataset)
         elif task=="detection":
-            path = pip_settings['workfolder']  + "\\checkpoints\\mmedu_det_model\\"
+            # path = pip_settings['workfolder']  + "/checkpoints/mmedu_det_model/"
+            path = os.path.join(pip_settings['workfolder'],"checkpoints","mmedu_det_model")
             if not os.path.exists(path+dataset):
                 os.makedirs(path+dataset)
         return jsonify(response_data)
@@ -99,7 +101,7 @@ def set_advance_config():
 
     # 如果pretrained_model不是一个路径，而是一个预训练模型的名字，则需要更新pretrained_path
     # 判断pretrained_model是否是一个路径
-    if pretrained_model.find('\\') == -1:
+    if pretrained_model.find('\\') == -1 and pretrained_model.find('/') == -1:
         # pretrained_model不是一个路径，而是一个预训练模型的名字，则需要更新pretrained_path
         update_pretrained_path(pretrained_model=pretrained_model)
     else:
@@ -126,7 +128,8 @@ def get_local_pretrained_model():
             res = pretrained_models['mmedu_cls_model']
             # 根据dataset_path的最后一个文件夹名字，获取对应的预训练模型
             dataset_path = global_varibles['dataset_path']
-            dataset_name = dataset_path.split('\\')[-1]
+            # dataset_name = dataset_path.split('\\')[-1]
+            dataset_name = os.path.basename(dataset_path)
             model_list = res[dataset_name]
             print(model_list)
             return jsonify(model_list)
@@ -134,7 +137,8 @@ def get_local_pretrained_model():
             res = pretrained_models['mmedu_det_model']
             # 根据dataset_path的最后一个文件夹名字，获取对应的预训练模型
             dataset_path = global_varibles['dataset_path']
-            dataset_name = dataset_path.split('\\')[-1]
+            # dataset_name = dataset_path.split('\\')[-1]
+            dataset_name = os.path.basename(dataset_path)
             model_list = res[dataset_name]  # note: 安装包中的dataset名字与预训练模型中的文件夹名字需要保持一致
             print(model_list)
             return jsonify(model_list)
@@ -164,7 +168,10 @@ def convert_model():
     # 2. 获取best, 以best_accuracy开头
     best_pth=""
     for pth in pth_list:
-        if pth.split('\\')[-1].startswith('best_accuracy'):
+        # if pth.split('\\')[-1].startswith('best_accuracy'):
+        #     best_pth = pth
+        #     break
+        if os.path.basename(pth).startswith('best_accuracy'):
             best_pth = pth
             break
     if global_varibles['task']=='classification':

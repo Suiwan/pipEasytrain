@@ -19,9 +19,9 @@ global_varibles = {
     "task": "classification",
     "model": "LeNet",
     "dataset": "hand_gray",
-    "dataset_path": pip_settings["workfolder"]+ "\\datasets\\mmedu_cls\\hand_gray",
-    "checkpoints_path": pip_settings["workfolder"] + "\\my_checkpoints", # D:\\workspace\\XEdu\\EasyDL2.0\\checkpoints\\mmedu_20231106_161141
-    # "checkpoints_path":"D:\\workspace\\XEdu\\EasyDL2.0\\checkpoints\\mmedu_20231106_161141",
+    "dataset_path": os.path.join(pip_settings["workfolder"],"datasets","mmedu_cls","hand_gray"),
+    # "checkpoints_path": pip_settings["workfolder"] + "/my_checkpoints",
+    "checkpoints_path": os.path.join(pip_settings["workfolder"],"my_checkpoints"),
     "lr": 0.01,
     "epoch": 10,
     "batch_size": None,
@@ -92,16 +92,20 @@ def set_pretrained_path(pretrained_path):
 def get_all_dataset():
     res = {}
     # 获取cls文件夹下的所有文件夹
-    cls_dataset_path = pip_settings["workfolder"]  + "\\datasets\\mmedu_cls"
+    # cls_dataset_path = pip_settings["workfolder"]  + "/datasets/mmedu_cls"
+    cls_dataset_path = os.path.join(pip_settings["workfolder"],"datasets","mmedu_cls")
     cls_dataset_list = os.listdir(cls_dataset_path)
     # 过滤掉非文件夹
-    cls_dataset_list = [x for x in cls_dataset_list if os.path.isdir(cls_dataset_path + "\\" + x)]
+    # cls_dataset_list = [x for x in cls_dataset_list if os.path.isdir(cls_dataset_path + "/" + x)]
+    cls_dataset_list = [x for x in cls_dataset_list if os.path.isdir(os.path.join(cls_dataset_path,x))]
     res['cls'] = [os.path.join(cls_dataset_path,x) for x in cls_dataset_list]
     # 获取det文件夹下的所有文件夹
-    det_dataset_path = pip_settings["workfolder"]  + "\\datasets\\mmedu_det"
+    # det_dataset_path = pip_settings["workfolder"]  + "/datasets/mmedu_det"
+    det_dataset_path = os.path.join(pip_settings["workfolder"],"datasets","mmedu_det")
     det_dataset_list = os.listdir(det_dataset_path)
     # 过滤掉非文件夹
-    det_dataset_list = [x for x in det_dataset_list if os.path.isdir(det_dataset_path + "\\" + x)]  
+    # det_dataset_list = [x for x in det_dataset_list if os.path.isdir(det_dataset_path + "/" + x)]  
+    det_dataset_list = [x for x in det_dataset_list if os.path.isdir(os.path.join(det_dataset_path,x))]
     res['det'] = [os.path.join(det_dataset_path,x) for x in det_dataset_list]
     # print("dataset_list",res)
     return res
@@ -110,22 +114,26 @@ def get_all_dataset():
 def get_all_pretrained_model():  # note： 预训练模型统一按照要求放在checkpoints文件夹的对应task文件夹的对应数据集文件夹下
     pwd = pip_settings["workfolder"] 
     # checkpoints文件夹
-    checkpoints_path = pwd + "\\checkpoints"
+    # checkpoints_path = pwd + "/checkpoints"
+    checkpoints_path = os.path.join(pwd,"checkpoints")
     print(checkpoints_path)
     checkpoints_list = os.listdir(checkpoints_path)
     # 过滤掉非文件夹
-    checkpoints_list = [x for x in checkpoints_list if os.path.isdir(checkpoints_path + "\\" + x)]
+    # checkpoints_list = [x for x in checkpoints_list if os.path.isdir(checkpoints_path + "/" + x)]
+    checkpoints_list = [x for x in checkpoints_list if os.path.isdir(os.path.join(checkpoints_path,x))]
     # print(checkpoints_list)
     res = {}
     for x in checkpoints_list:
         # 获取checkpoints文件夹下的所有文件夹
-        checkpoints_path = pwd + "\\checkpoints\\" + x
+        # checkpoints_path = pwd + "/checkpoints/" + x
+        checkpoints_path = os.path.join(pwd,'checkpoints',x)
         if os.path.isdir(checkpoints_path):
             checkpoints_list = os.listdir(checkpoints_path)
             temp = {}
             for y in checkpoints_list:
                 # 获取checkpoints文件夹下的所有文件夹
-                checkpoints_path = pwd + "\\checkpoints\\" + x + "\\" + y
+                # checkpoints_path = pwd + "/checkpoints/" + x + "/" + y
+                checkpoints_path = os.path.join(pwd,'checkpoints',x,y)
                 if os.path.isdir(checkpoints_path):
                     checkpoints_list = os.listdir(checkpoints_path)
                     # 仅保留.pth文件
@@ -146,19 +154,23 @@ def update_pretrained_path(pretrained_model):
         global_varibles['pretrained_path'] = None
         return
     if global_varibles['task'] == 'classification':
-        pretrained_path = pwd + "\\checkpoints\\mmedu_cls_model\\" + global_varibles['dataset'] + "\\" + pretrained_model
+        # pretrained_path = pwd + "/checkpoints/mmedu_cls_model/" + global_varibles['dataset'] + "/" + pretrained_model
+        pretrained_path = os.path.join(pwd,"checkpoints","mmedu_cls_model",global_varibles['dataset'],pretrained_model)
         global_varibles['pretrained_path'] = pretrained_path
     elif global_varibles['task'] == 'detection':
-        pretrained_path = pwd + "\\checkpoints\\mmedu_det_model\\" + global_varibles['dataset'] + "\\" + pretrained_model
+        # pretrained_path = pwd + "/checkpoints/mmedu_det_model/" + global_varibles['dataset'] + "/" + pretrained_model
+        pretrained_path = os.path.join(pwd,"checkpoints","mmedu_det_model",global_varibles['dataset'],pretrained_model)
         global_varibles['pretrained_path'] = pretrained_path
 
 
 
 def update_dataset_path():
     if global_varibles['task'] == 'classification':
-        global_varibles["dataset_path"] = pip_settings["workfolder"]+ "\\datasets\\mmedu_cls\\" + global_varibles["dataset"]
+        # global_varibles["dataset_path"] = pip_settings["workfolder"]+ "/datasets/mmedu_cls/" + global_varibles["dataset"]
+        global_varibles["dataset_path"] = os.path.join(pip_settings["workfolder"],"datasets","mmedu_cls",global_varibles["dataset"])
     elif global_varibles['task'] == 'detection':
-        global_varibles["dataset_path"] = pip_settings["workfolder"]+ "\\datasets\\mmedu_det\\" + global_varibles["dataset"]
+        # global_varibles["dataset_path"] = pip_settings["workfolder"]+ "/datasets/mmedu_det/" + global_varibles["dataset"]
+        global_varibles["dataset_path"] = os.path.join(pip_settings["workfolder"],"datasets","mmedu_det",global_varibles["dataset"])
 
 def generate_mmedu_code():
     update_dataset_path()
@@ -196,7 +208,8 @@ def generate_mmedu_code():
         entry_part = "if __name__ == '__main__':"+"\n"+"\t"+"generated_train()"+"\n"
         full_code = import_part + def_part + construct_part + class_part + dataset_part + save_part + train_part + entry_part
         with current_app.app_context():
-            with open(f"{pip_settings['workfolder']}/mmedu_code.py","w") as f:
+            # with open(f"{pip_settings['workfolder']}/mmedu_code.py","w") as f:
+            with open(os.path.join(pip_settings['workfolder'],"mmedu_code.py"),"w") as f:
                 f.write(full_code)
     print("生成代码：",full_code)
     return full_code

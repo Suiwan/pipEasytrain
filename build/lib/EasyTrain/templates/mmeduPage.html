@@ -94,9 +94,9 @@
                     </div>
                 </div>
                 {% if task == 'classification' %}
-                <h3 class="subtitle">已选择的任务：分类任务</h3>
+                <h3 class="subtitle" id="selectedTask">已选择的任务：分类任务</h3>
                 {% elif task == 'detection' %}
-                <h3 class="subtitle">已选择的任务：检测任务</h3>
+                <h3 class="subtitle" id="selectedTask">已选择的任务：检测任务</h3>
                 {% endif %}
                 <div class="container mt-3 position-relative">
                     <form id="task-select-form">

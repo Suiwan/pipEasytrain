@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 var datasetSelect = document.getElementById("dataset-select");
                 for (var i = 0; i < data.dataset.length; i++) {
                     var option = document.createElement("option");
+                    // replace \\ with /
                     option.text = data.dataset[i];
-                    // option.value = data.dataset[i];
                     option.value = data.dataset[i];
                     datasetSelect.add(option);
                 }

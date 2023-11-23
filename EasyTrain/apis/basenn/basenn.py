@@ -19,14 +19,23 @@ def select_dataset():
     data = json.loads(request.data)
     dataset = data.get("dataset")
     # 取dataset最后一个文件夹名字以及父文件夹名字
-    dir_name = dataset.split("\\")[len(dataset.split("\\"))-2]
-    file_name = dataset.split("\\")[-1]
+    # 如果路径包含/
+    if '/' in  dataset:
+        dir_name = dataset.split("/")[len(dataset.split("/"))-2]
+        file_name = dataset.split("/")[-1]
+    else:
+        dir_name = dataset.split("\\")[len(dataset.split("\\"))-2]
+        file_name = dataset.split("\\")[-1]
+    print("dir_name",dir_name)
+    print("file_name",file_name)
+    dataset = os.path.join(dir_name,file_name)
     print("dataset",dataset)
     set_dataset(dataset=dataset)
     update_dataset_path()
     print("dataset now ",global_varibles["dataset"])
     print("dataset_path now ",global_varibles["dataset_path"])
-    path = pip_settings['workfolder'] + "\\checkpoints\\basenn_model\\"
+    # path = pip_settings['workfolder'] + "/checkpoints/basenn_model/"
+    path = os.path.join(pip_settings['workfolder'],"checkpoints","basenn_model")
     if not os.path.exists(path+dir_name):
             os.makedirs(path+dir_name)
     return jsonify({'message': '设置成功!', 'success': True})
@@ -95,7 +104,7 @@ def set_advance_cfg():
         if pretrained != "None":
             update_pretrained_path(pretrained=pretrained)
         print("global_varibles now ",global_varibles)
-        if pretrained.find('\\') == -1:
+        if pretrained.find('\\') == -1 and pretrained.find('/') == -1:
             # pretrained_model不是一个路径，而是一个预训练模型的名字，则需要更新pretrained_path
             if pretrained != "None":
                 update_pretrained_path(pretrained=pretrained)

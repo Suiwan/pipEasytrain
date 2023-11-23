@@ -89,6 +89,15 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('task-submit-btn').addEventListener('click', function () {
         // 获取选中的任务类型
         var selectedTask = document.getElementById('task-select').value;
+
+        if(selectedTask=="classification"){
+            var task1 = document.getElementById('selectedTask')
+            task1.textContent = "已选择的任务类型：分类任务" ;
+        }
+        else if(selectedTask=="detection"){
+            var task1 = document.getElementById('selectedTask')
+            task1.textContent = "已选择的任务类型：检测任务" ;
+        }
         // 构建请求数据
         var requestData = {
             task: selectedTask

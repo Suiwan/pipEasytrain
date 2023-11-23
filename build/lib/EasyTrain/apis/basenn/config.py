@@ -13,8 +13,8 @@ def back2pwd(pwd,level):
 
 # global_varibles = {
 #     "dataset":"iris_training.csv",
-#     "dataset_path": back2pwd(__file__,4) + "\\datasets\\basenn\\iris\\iris_training.csv",
-#     "checkpoints_path": back2pwd(__file__,4) + "\\my_checkpoints", # save fold path
+#     "dataset_path": back2pwd(__file__,4) + "/datasets/basenn/iris/iris_training.csv",
+#     "checkpoints_path": back2pwd(__file__,4) + "/my_checkpoints", # save fold path
 #     "lr": 0.01,
 #     "epochs": 10,
 #     "network": [{'id': 1, 'type': 'linear', 'activation': 'relu', 'size': (4, 10)}, 
@@ -36,10 +36,12 @@ pip_settings = {
     "workfolder" : os.getcwd(), # pip包安装特有
 }
 
+
 global_varibles = {
-    "dataset":"iris\\iris_training.csv",
-    "dataset_path": pip_settings["workfolder"] + "\\datasets\\basenn\\iris\\iris_training.csv",
-    "checkpoints_path": pip_settings["workfolder"] + "\\my_checkpoints", # save fold path
+    "dataset":os.path.join("iris","iris_training.csv"),
+    # "dataset_path": pip_settings["workfolder"] + "/datasets/basenn/iris/iris_training.csv",
+    "dataset_path":os.path.join(pip_settings["workfolder"],"datasets","basenn","iris","iris_training.csv"),
+    "checkpoints_path": os.path.join(pip_settings["workfolder"],"my_checkpoints"), # save fold path
     "lr": 0.01,
     "epochs": 10,
     "network": [{'id': 1, 'type': 'linear', 'activation': 'relu', 'size': (4, 60)}, 
@@ -54,9 +56,9 @@ global_varibles = {
 }
 
 # global_varibles = {
-#     "dataset":"test\\train.csv",
-#     "dataset_path": pip_settings["workfolder"]+ "\\datasets\\basenn\\test\\normed_train.csv",
-#     "checkpoints_path": pip_settings["workfolder"]+ "\\my_checkpoints", # save fold path
+#     "dataset":"test/train.csv",
+#     "dataset_path": pip_settings["workfolder"]+ "/datasets/basenn/test/normed_train.csv",
+#     "checkpoints_path": pip_settings["workfolder"]+ "/my_checkpoints", # save fold path
 #     "lr": 0.01,
 #     "epochs": 10,
 #     "network": [{'id': 1, 'type': 'linear', 'activation': 'relu', 'size': (3, 60)}, 
@@ -87,7 +89,10 @@ def get_all_pth(pwd):
 
 
 def get_all_pretrained_model():
-    pwd = pip_settings["workfolder"] + "\\checkpoints\\basenn_model"+ "\\" + global_varibles['dataset'].split("\\")[0]
+    if os.name == "nt":
+        pwd = os.path.join(pip_settings["workfolder"],"checkpoints","basenn_model",global_varibles['dataset'].split("\\")[0])
+    else:
+        pwd = os.path.join(pip_settings["workfolder"],"checkpoints","basenn_model",global_varibles['dataset'].split("/")[0])
     return get_all_pth(pwd)
     
 
@@ -135,27 +140,35 @@ def update_global_varibles(**kwargs):
 
 def update_pretrained_path(pretrained):
     pwd = pip_settings["workfolder"]
-    pretrained_path = pwd + "\\checkpoints\\" + global_varibles['dataset'] + "\\" + pretrained
+    # pretrained_path = pwd + "/checkpoints/" + global_varibles['dataset'] + "/" + pretrained
+    if os.name == "nt":
+        pretrained_path = os.path.join(pwd,"checkpoints",global_varibles['dataset'].split("\\")[0],pretrained)
+    else:
+        pretrained_path = os.path.join(pwd,"checkpoints",global_varibles['dataset'].split("/")[0],pretrained)
     global_varibles['pretrained_path'] = pretrained_path
 
 def update_dataset_path():
-    global_varibles["dataset_path"] = pip_settings["workfolder"] + "\\datasets\\" + global_varibles["dataset"]
+    # global_varibles["dataset_path"] = pip_settings["workfolder"] + "/datasets/" + global_varibles["dataset"]
+    global_varibles["dataset_path"] = os.path.join(pip_settings["workfolder"],"datasets","basenn",global_varibles["dataset"])
 
 
 def get_all_dataset():
     dataset_list = []
-    pwd = pip_settings["workfolder"] + "\\datasets\\basenn"
+    # pwd = pip_settings["workfolder"] + "/datasets/basenn"
+    pwd = os.path.join(pip_settings["workfolder"],"datasets","basenn")
     dirs = os.listdir(pwd)
     # print(dirs)
     for dir in dirs:
         for file in os.listdir(os.path.join(pwd,dir)):
             # print(os.path.join(pwd,dir,file))
             if os.path.isfile(os.path.join(pwd,dir,file)):
-                dataset_list.append(os.path.join(pwd,dir,file))
+                dataset = os.path.join(pwd,dir,file)
+                dataset_list.append(dataset)
     return dataset_list
 
 def update_dataset_path():
-    global_varibles["dataset_path"] = pip_settings["workfolder"] + "\\datasets\\basenn\\" + global_varibles["dataset"]
+    # global_varibles["dataset_path"] = pip_settings["workfolder"] + "/datasets/basenn/" + global_varibles["dataset"]
+    global_varibles["dataset_path"] = os.path.join(pip_settings["workfolder"],"datasets","basenn",global_varibles["dataset"])
 
 
 
@@ -205,7 +218,8 @@ def generate_basenn_code():
     entry_part = "\n"+"if __name__ == '__main__':"+"\n"+"\t"+"generated_train()"+"\n"
     full_code = import_part + "\n" + def_part +model_part + dataset_part + save_part + seed_part + optimizer_part  + construct_part + train_part + entry_part
     with current_app.app_context():
-        with open(f"{pip_settings['workfolder']}/basenn_code.py","w") as f:
+        # with open(f"{pip_settings['workfolder']}/basenn_code.py","w") as f:
+        with open(os.path.join(pip_settings['workfolder'],"basenn_code.py"),"w") as f:
             f.write(full_code)
         return full_code
 

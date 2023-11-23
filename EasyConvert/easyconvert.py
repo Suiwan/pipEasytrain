@@ -4,12 +4,11 @@ import torch
 import threading
 
 def convert_pth_2_onnx(pth_path,window):
-    output_text = f"将.pth模型文件转换为.onnx格式文件：{file_path}\n"
+    output_text = f"将.pth模型文件转换为.onnx格式文件：{pth_path}\n"
     window["output"].update(output_text, append=True)
     # 输出路径就在pth文件所在目录下，用pth文件的原始文件名作为输出文件名
     output_path = f'{pth_path.split(".")[0]}.onnx'
     model = torch.load(pth_path, map_location='cpu')
-
     meta_info = model['meta'] if 'meta' in model else None
     if meta_info is None:
         print("Meta info not found!")
@@ -106,7 +105,6 @@ def main():
             break
         elif event == "模型转换":
             file_path = values["file_path"]
-            folder_path = values["folder_path"]
             option1_selected = values["option1"]
             option2_selected = values["option2"]
 
@@ -117,7 +115,7 @@ def main():
                         target=convert_pth_2_onnx,
                         args=(file_path,window,),
                         daemon=True)
-                    thread_id.start()
+                    thread_id.start() 
                     # convert_pth_2_onnx(file_path)
                 elif option2_selected:
                     process_file_option2(file_path)
@@ -139,6 +137,6 @@ def main():
             #     window["output"].update("模型文件夹路径无效，请选择一个有效文件夹。\n", append=True)
 
         # 关闭窗口
-        window.close()
+    window.close()
 
 

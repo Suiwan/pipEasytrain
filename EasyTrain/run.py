@@ -21,47 +21,6 @@ def basenn():
     return render_template('basennPage.html',dataset=global_varibles['dataset'])
 
 
-# 离线轮询
-# def poll_log():
-#     global shared_data
-#     time_stamp = shared_data.get('time_stamp', '')
-#     last_line_num = 0
-#     print("log_task"+time_stamp)
-#     isRunning = shared_data.get('IsRunning', False)
-#     log_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__))) + "\\checkpoints\\" + f"{time_stamp}"
-#     json_path = ""
-#     while True:
-#         json_files = [x for x in os.listdir(log_path) if x.endswith('.json')]
-#         if len(json_files) != shared_data['train_times']: # 防止多次训练时，没读取到最新的日志文件
-#             time.sleep(1)
-#         else:
-#             json_path = os.path.join(log_path, json_files[-1])
-#             break
-#     print("log_path",json_path)
-#     while isRunning:
-#         if os.path.exists(json_path):
-#             with open(json_path, 'r') as f:
-#                 lines = f.readlines()
-#                 if len(lines) > last_line_num:
-#                     for line in lines[last_line_num:]:
-#                         log = json.loads(line)
-#                         # to str
-#                         log = json.dumps(log)
-#                         shared_data['message'] = log
-#                         print(log)
-#                     last_line_num = len(lines)
-#             time.sleep(1)
-#     print("log_task end")
-
-
-# 离线轮询
-# @app.route('/get_message',methods=['GET'])
-# def get_message():
-
-#     global shared_data
-#     log_data = shared_data['message']
-#     return jsonify(log_data)
-
 
 mmedu_shared_data = {
     'message':None,
@@ -95,12 +54,7 @@ def mmedu_train_task(child_conn,workfolder):
     mmedu_shared_data['IsRunning'] = True
     print("isRunning",mmedu_shared_data['IsRunning'])
     import sys
-    mmedu_running_process = subprocess.Popen([f"{sys.executable}",f"{workfolder}/mmedu_code.py"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    # try:
-    #     print(sys.executable)
-    #     subprocess.check_call([f"{sys.executable}","mmedu_code.py"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    # except subprocess.CalledProcessError as e:
-    #     print("error",e)
+    mmedu_running_process = subprocess.Popen([f"{sys.executable}",os.path.join(workfolder,"mmedu_code.py")],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     print(mmedu_running_process.pid)
     child_conn.send(mmedu_running_process.pid)
     out,error = mmedu_running_process.communicate() # 尝试打印运行时的报错
@@ -120,7 +74,8 @@ def basenn_train_task():
     print(global_varibles)
     print(basenn_shared_data)
     import sys
-    basenn_running_process = subprocess.Popen([f"{sys.executable}",f"{workfolder}/basenn_code.py"],stdout=subprocess.PIPE, stderr=subprocess.PIPE,encoding='gb18030')
+    # basenn_running_process = subprocess.Popen([f"{sys.executable}",f"{workfolder}/basenn_code.py"],stdout=subprocess.PIPE, stderr=subprocess.PIPE,encoding='gb18030')
+    basenn_running_process = subprocess.Popen([f"{sys.executable}",os.path.join(workfolder,"basenn_code.py")],stdout=subprocess.PIPE, stderr=subprocess.PIPE,encoding='gb18030')
     # 获取子进程输出
     basenn_poll_log_socket(basenn_running_process)
     basenn_running_process = None
@@ -136,7 +91,8 @@ def mmedu_poll_log_socket():
     last_line_num = 0
     print("log_task："+time_stamp)
     from .apis.mmedu.config import pip_settings as mmedu_pip_settings
-    log_path = mmedu_pip_settings['workfolder'] + "\\my_checkpoints\\" + "mmedu_"+time_stamp
+    # log_path = mmedu_pip_settings['workfolder'] + "/my_checkpoints/" + "mmedu_"+time_stamp
+    log_path = os.path.join(mmedu_pip_settings['workfolder'],"my_checkpoints","mmedu_"+time_stamp)
     while True:
         json_files = [x for x in os.listdir(log_path) if x.endswith('.json')]
         if len(json_files) != mmedu_shared_data['train_times']: # 防止多次训练时，没读取到最新的日志文件
@@ -246,7 +202,11 @@ def mmedu_stop_thread():
     print(mmedu_shared_data)
     # 根据pid结束进程 
     if mmedu_shared_data['pid']:
-        os.system("taskkill /pid "+str(mmedu_shared_data['pid'])+" /f")
+        if os.name == 'nt':
+            os.system("taskkill /pid "+str(mmedu_shared_data['pid'])+" /f")
+        # 如果是linux系统，则使用下面的命令
+        elif os.name == 'posix': 
+            os.system("kill -9 "+str(mmedu_shared_data['pid']))
         mmedu_shared_data['pid'] = None
         return jsonify({'message': '已结束训练'},{'success':True})
     else:
@@ -261,7 +221,8 @@ def get_mmedu_code():
     # make dir for checkpoints
     t = time.strftime('%Y%m%d_%H%M%S', time.localtime())
     from .apis.mmedu.config import pip_settings as mmedu_pip_settings
-    checkpoints_path = mmedu_pip_settings['workfolder'] + "\\my_checkpoints\\" + "mmedu_"+t
+    # checkpoints_path = mmedu_pip_settings['workfolder'] + "/my_checkpoints/" + "mmedu_"+t
+    checkpoints_path = os.path.join(mmedu_pip_settings['workfolder'],"my_checkpoints","mmedu_"+t)
     print("checkpoints_path: ",checkpoints_path)
     os.mkdir(checkpoints_path)
     set_mmedu_checkpoints_path(checkpoints_path=checkpoints_path)
@@ -280,7 +241,8 @@ def get_basenn_code():
     # make dir for checkpoints
     t = time.strftime('%Y%m%d_%H%M%S', time.localtime())
     from .apis.basenn.config import pip_settings as basenn_pip_settings
-    checkpoints_path = basenn_pip_settings['workfolder'] + "\\my_checkpoints\\"  + "basenn_"+t
+    # checkpoints_path = basenn_pip_settings['workfolder'] + "/my_checkpoints/"  + "basenn_"+t
+    checkpoints_path = os.path.join(basenn_pip_settings['workfolder'],"my_checkpoints","basenn_"+t)
     print("checkpoints_path: ",checkpoints_path)
     os.mkdir(checkpoints_path)
     set_basenn_checkpoints_path(checkpoints_path=checkpoints_path)
@@ -299,17 +261,26 @@ def exist_or_mkdir(path):
 
 def check_workfolder(pwd):
     # 检查pwd下是否有datasets,checkpoints,my_checkpoints文件夹
-    exist_or_mkdir(pwd+"\\datasets")
-    exist_or_mkdir(pwd+"\\checkpoints")
-    exist_or_mkdir(pwd+"\\my_checkpoints")
+    # exist_or_mkdir(pwd+"/datasets")
+    exist_or_mkdir(os.path.join(pwd,"datasets"))
+    # exist_or_mkdir(pwd+"/checkpoints")
+    exist_or_mkdir(os.path.join(pwd,"checkpoints"))
+    # exist_or_mkdir(pwd+"/my_checkpoints")
+    exist_or_mkdir(os.path.join(pwd,"my_checkpoints"))
     # 检查datasets下是否有mmedu_cls,mmedu_det,basenn,basenn_文件夹
-    exist_or_mkdir(pwd+"\\datasets\\mmedu_cls")
-    exist_or_mkdir(pwd+"\\datasets\\mmedu_det")
-    exist_or_mkdir(pwd+"\\datasets\\basenn")
+    # exist_or_mkdir(pwd+"/datasets/mmedu_cls")
+    exist_or_mkdir(os.path.join(pwd,"datasets","mmedu_cls"))
+    # exist_or_mkdir(pwd+"/datasets/mmedu_det")
+    exist_or_mkdir(os.path.join(pwd,"datasets","mmedu_det"))
+    # exist_or_mkdir(pwd+"/datasets/basenn")
+    exist_or_mkdir(os.path.join(pwd,"datasets","basenn"))
     # 检查checkpoints下是否有mmedu_cls_model,mmedu_det_model,basenn_model文件夹
-    exist_or_mkdir(pwd+"\\checkpoints\\mmedu_cls_model")
-    exist_or_mkdir(pwd+"\\checkpoints\\mmedu_det_model")
-    exist_or_mkdir(pwd+"\\checkpoints\\basenn_model")
+    # exist_or_mkdir(pwd+"/checkpoints/mmedu_cls_model")
+    exist_or_mkdir(os.path.join(pwd,"checkpoints","mmedu_cls_model"))
+    # exist_or_mkdir(pwd+"/checkpoints/mmedu_det_model")
+    exist_or_mkdir(os.path.join(pwd,"checkpoints","mmedu_det_model"))
+    # exist_or_mkdir(pwd+"/checkpoints/basenn_model")
+    exist_or_mkdir(os.path.join(pwd,"checkpoints","basenn_model"))
     # 后续可做：下载预训练模型和数据集，放到对应文件夹下。
     
 
