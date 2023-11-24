@@ -11,7 +11,8 @@ setup(
         "flask-cors",
         "flask-socketio",
         "MMEdu>=0.1.21",
-        "BaseNN>=0.2.2"
+        "BaseNN>=0.2.2",
+        "pysimplegui"
     ],
     python_requires='>=3.8',
     license="MIT",
