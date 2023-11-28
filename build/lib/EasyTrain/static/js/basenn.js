@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-
-
     // 获取数据集列表
     function getAllDataset() {
         fetch('/basenn/get_dataset', {
@@ -24,6 +22,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
             });
     }
+
+    $(document).ready(function () {
+        $('#myCarousel').on('slid.bs.carousel', function () {
+            var currentIndex = $('#myCarousel .active').index();
+            if (currentIndex == 3){
+                fetch('/get_xedu_pkg', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // 如果data中不含有BaseNN，提示没有安装BaseNN，如果没有MMEdu，提示没有安装MMEdu
+                    if (data['BaseNN'] == false) {
+                        alert("没有安装BaseNN，请先安装BaseNN!");
+                    }
+                });
+            }
+        });
+    });
 
     // 更新轮播项的内容
     function updateCarouselContent(dataset) {
@@ -1092,3 +1112,4 @@ function nextCarouselItem() {
             });
         });
 });
+

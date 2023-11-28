@@ -1,9 +1,3 @@
-import os
-
-
-p1 = "ppp"
-
-p2 = "qqqq"
-
-basename = os.path.join(p1,p2)
-print(basename)
+import pkg_resources
+packages = [dist.project_name for dist in pkg_resources.working_set]
+print(packages)

@@ -217,7 +217,6 @@ function updateCarouselContent(task, model, dataset) {
 
 // 在页面渲染时，获取本地数据集
 // 在跳转到第三个轮播项时，获取本地数据集
-
 // 监听跳转到第三个页面：
 $(document).ready(function () {
     $('#myCarousel').on('slid.bs.carousel', function () {
@@ -278,8 +277,25 @@ $(document).ready(function () {
             var selectedTask = document.getElementById('task-select').value;
             updateCarouselContent(selectedTask, null, null);
         }
+        // 跳转到训练页面
+        else if (currentIndex == 4){
+            fetch('/get_xedu_pkg', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data['MMEdu'] == false) {
+                    alert("没有安装MMEdu，请先安装MMEdu!");
+                }
+            });
+        }
     });
 });
+
 
 
 // 选择数据集
@@ -464,6 +480,9 @@ function nextCarouselItem() {
 
 
 var total_log_data = [];
+
+
+
 
 // 点击开始训练按钮，发送请求到后端
 document.getElementById('start-train-btn').addEventListener('click', function () {

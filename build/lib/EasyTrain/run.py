@@ -12,6 +12,7 @@ from .apis.basenn.config import set_basenn_checkpoints_path,generate_basenn_code
 from .apis.mmedu.config import global_varibles as mmedu_global_varibles
 
 
+
 @app.route('/')
 def index():
     return redirect(url_for('mmedu.index'),code=301)
@@ -251,6 +252,22 @@ def get_basenn_code():
     print("time_stamp",basenn_shared_data['time_stamp'])
     full_code = generate_basenn_code()
     return jsonify(full_code)
+
+
+@app.route('/get_xedu_pkg',methods=['GET'])
+def get_xedu_pkg():
+    import pkg_resources
+    packages = [dist.project_name for dist in pkg_resources.working_set]
+    res = {
+        "MMEdu":False,
+        "BaseNN":False,
+    }
+    # 如果packages中有BaseNN，则res中加入BaseNN:false,否则加入BaseNN:true
+    if "BaseNN" in packages:
+        res["BaseNN"] = True
+    if "MMEdu" in packages:
+        res["MMEdu"] = True
+    return jsonify(res)
 
 
 def exist_or_mkdir(path):
