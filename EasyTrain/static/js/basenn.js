@@ -56,12 +56,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (data.success) {
                     // 跳转到下一轮播页面
                     updateCarouselContent(dataset);
-                    $('#myCarousel').carousel('next');
                 }
                 else {
                     alert("数据集选择失败，请检查数据集是否正确！");
                 }
             });
+            $('#myCarousel').carousel('next');
     });
 
 
@@ -452,6 +452,19 @@ document.addEventListener("DOMContentLoaded", function () {
         var loss = lossSelect.options[lossSelect.selectedIndex].value;
         var pretrainedSelect = document.getElementById("pretrained-select");
         var pretrained = pretrainedSelect.options[pretrainedSelect.selectedIndex].value;
+        if (pretrained == "custom") {
+            pretrained = document.getElementById("custom-pretrained-model").value;
+            // 如果自定义的预训练模型为空，就报错
+            if (pretrained == "") {
+                alert("请输入自定义的预训练模型路径!");
+                return;
+            }
+            // 如果不是以.pth结尾，就报错
+            if (pretrained.slice(-4) != ".pth") {
+                alert("自定义的预训练模型必须是.pth文件!");
+                return;
+            }
+        }
 
         var requestData = {
             "metrics": metrics,
@@ -934,18 +947,44 @@ function nextCarouselItem() {
     }
 
 
+
+
+    var pretrainedModelSelect = document.getElementById('pretrained-select');
+    pretrainedModelSelect.innerHTML = '';
+    var option_none = document.createElement("option");
+    option_none.text = "不使用预训练模型";
+    option_none.value = "None";
+    pretrainedModelSelect.appendChild(option_none);
+    var option_custom = document.createElement("option");
+    option_custom.text = "自定义";
+    option_custom.value = "custom";
+    pretrainedModelSelect.appendChild(option_custom);
+    // 如果选择了自定义，就加入一个自定义的输入框
+    pretrainedModelSelect.addEventListener('change', function () {
+        var selectedPretrainedModel = pretrainedModelSelect.options[pretrainedModelSelect.selectedIndex].value;
+        if (selectedPretrainedModel == "custom") {
+            // 创建一个input
+            var input = document.createElement("input");
+            input.setAttribute("type", "text");
+            input.setAttribute("id", "custom-pretrained-model");
+            input.setAttribute("class", "form-control");
+            input.setAttribute("placeholder", "请输入预训练模型的绝对路径");
+            pretrainedModelSelect.parentNode.appendChild(input);
+        }
+        else {
+            // 删除input
+            var input = document.getElementById("custom-pretrained-model");
+            if (input != null) {
+                input.parentNode.removeChild(input);
+            }
+        }
+
+    });
+
     document.getElementById('set-other-params-btn').addEventListener('click', function () {
 
         var pretrainedModelSelect = document.getElementById('pretrained-select');
         pretrainedModelSelect.innerHTML = '';
-        var option_none = document.createElement("option");
-        option_none.text = "不使用预训练模型";
-        option_none.value = "None";
-        pretrainedModelSelect.appendChild(option_none);
-        var option_custom = document.createElement("option");
-        option_custom.text = "自定义";
-        option_custom.value = "custom";
-        pretrainedModelSelect.appendChild(option_custom);
         fetch('/basenn/get_local_pretrained_model', {
             method: 'GET',
             headers: {
@@ -963,27 +1002,6 @@ function nextCarouselItem() {
                     option.value = data[i];
                     pretrainedModelSelect.appendChild(option);
                 }
-
-                // 如果选择了自定义，就加入一个自定义的输入框
-                pretrainedModelSelect.addEventListener('change', function () {
-                    var selectedPretrainedModel = pretrainedModelSelect.options[pretrainedModelSelect.selectedIndex].value;
-                    if (selectedPretrainedModel == "custom") {
-                        // 创建一个input
-                        var input = document.createElement("input");
-                        input.setAttribute("type", "text");
-                        input.setAttribute("id", "custom-pretrained-model");
-                        input.setAttribute("class", "form-control");
-                        input.setAttribute("placeholder", "请输入预训练模型的绝对路径");
-                        pretrainedModelSelect.parentNode.appendChild(input);
-                    }
-                    else {
-                        // 删除input
-                        var input = document.getElementById("custom-pretrained-model");
-                        if (input != null) {
-                            input.parentNode.removeChild(input);
-                        }
-                    }
-                });
             })
     });
 

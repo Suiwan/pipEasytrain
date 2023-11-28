@@ -55,13 +55,13 @@ def select_dataset():
             # 检查在checkpoints/mmcls_model/下是否存在该dataset同名文件夹,如果不存在，则创建该文件夹
             # path = pip_settings['workfolder'] + "/checkpoints/mmedu_cls_model/"
             path = os.path.join(pip_settings['workfolder'],"checkpoints","mmedu_cls_model")
-            if not os.path.exists(path+dataset):
-                os.makedirs(path+dataset)
+            if not os.path.exists(os.path.join(path,dataset)):
+                os.makedirs(os.path.join(path,dataset))
         elif task=="detection":
             # path = pip_settings['workfolder']  + "/checkpoints/mmedu_det_model/"
             path = os.path.join(pip_settings['workfolder'],"checkpoints","mmedu_det_model")
-            if not os.path.exists(path+dataset):
-                os.makedirs(path+dataset)
+            if not os.path.exists(os.path.join(path,dataset)):
+                os.makedirs(os.path.join(path,dataset))
         return jsonify(response_data)
 
 

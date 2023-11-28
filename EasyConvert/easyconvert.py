@@ -1,9 +1,9 @@
 import PySimpleGUI as sg
 import os
-import torch
 import threading
 
 def convert_pth_2_onnx(pth_path,window):
+    import torch
     output_text = f"将.pth模型文件转换为.onnx格式文件：{pth_path}\n"
     window["output"].update(output_text, append=True)
     # 输出路径就在pth文件所在目录下，用pth文件的原始文件名作为输出文件名
@@ -75,7 +75,7 @@ def convert_pth_2_onnx(pth_path,window):
 # 定义处理函数2
 def process_file_option2(file_path):
     # 在这里执行模型操作2，这里仅仅打印文件路径作为示例
-    output_text = f"处理文件（选项2）：{file_path}\n"
+    output_text = f"该功能目前不支持，敬请期待！\n"
     window["output"].update(output_text, append=True)
 
  

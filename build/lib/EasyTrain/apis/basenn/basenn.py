@@ -36,8 +36,8 @@ def select_dataset():
     print("dataset_path now ",global_varibles["dataset_path"])
     # path = pip_settings['workfolder'] + "/checkpoints/basenn_model/"
     path = os.path.join(pip_settings['workfolder'],"checkpoints","basenn_model")
-    if not os.path.exists(path+dir_name):
-            os.makedirs(path+dir_name)
+    if not os.path.exists(os.path.join(path,dir_name)):
+            os.makedirs(os.path.join(path,dir_name))
     return jsonify({'message': '设置成功!', 'success': True})
 
 
