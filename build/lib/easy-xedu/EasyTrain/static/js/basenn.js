@@ -673,7 +673,7 @@ function nextCarouselItem() {
     });
 
     num = 0;
-    const socket = io.connect('http://localhost:5000');
+    const socket = io.connect(location.host);
     function poll_log() {
         lossList = []
         accList = []

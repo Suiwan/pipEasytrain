@@ -659,7 +659,7 @@ function get_checkpoints_path() {
 
 
 // console.log(G_checkpoints_path);
-const socket = io.connect('http://localhost:5000');
+const socket = io.connect(location.host);
 function poll_log() {
     // 连接socket
 
