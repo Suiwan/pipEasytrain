@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 from flask import Flask
 from flask_socketio import SocketIO
 from flask_cors import CORS
